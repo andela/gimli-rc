@@ -11,11 +11,30 @@ Reaction is built with JavaScript (ES6), Meteor, Node.js and works nicely with D
 **_reaction-cli installation_**
 
 ```bash
-npm install -g reaction-cli
-reaction init
-cd reaction
-reaction
+  npm install -g reaction-cli
 ```
+
+**_Meteor installation_**
+
+```bash
+  curl https://install.meteor.com/ | sh 
+```
+
+**_Project Setup_**
+
+```bash
+  git clone git@github.com:andela/gimli-rc.git
+  cd gimli-rc
+  npm install
+  reaction pull
+  brew install imagemagick
+  meteor npm install --save react-addons-shallow-compare
+  meteor npm install --save bcrypt
+  reaction run
+```
+
+The app should start running on `localhost:3000`.
+
 
 `reaction -v` provides useful version information you'll need for debugging if you have issues with `reaction`.
 
@@ -100,3 +119,4 @@ We require that all releases are deployable as [Docker](https://www.docker.com/)
 ##### Docker
 
 Docker images are pushed when Reaction sucessfully builds and passes all tests on the `master` or `development` branches. These images are released on [Reaction Commerce Docker Hub](https://hub.docker.com/u/reactioncommerce/). There are two images available: [reactioncommerce:prequel](https://hub.docker.com/r/reactioncommerce/prequel/) - the latest `development` image and [reactioncommerce:reaction](https://hub.docker.com/r/reactioncommerce/reaction/), the `master` image.
+
