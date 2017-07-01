@@ -13,17 +13,17 @@
 
       {{#if product.isDeleted}}
         <div>
-        <span class="badge badge-danger" data-i18n="app.deleted">
-          <span>Deleted</span>
+        <span class="badge badge-danger" data-i18n="app.archived">
+          <span>Archived</span>
         </span>
       </div>
       {{/if}}
 
-      <div>
+      <div data-step="12" data-intro="Change the visibility of this product" data-position="auto">
         {{> React VisibilityButton}}
       </div>
 
-      <div>
+      <div data-step="13" data-intro="Edit the details of this product" data-position="auto">
         {{> React EditButton}}
       </div>
 
