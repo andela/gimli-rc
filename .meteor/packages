@@ -95,9 +95,6 @@ practicalmeteor:sinon
 
 
 # Custom Packages
-<<<<<<< HEAD
 simple:rest
-=======
 react-template-helper
 ultimatejs:tracker-react@1.0.5
->>>>>>> 85e09d1044d0cc743ba1ab4a4b31364b1250a7ae
