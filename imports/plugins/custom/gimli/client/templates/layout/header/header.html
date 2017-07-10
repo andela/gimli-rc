@@ -1,0 +1,59 @@
+<template name="gimliHeader">
+  <!--<script>
+    $(document).ready(function(){
+      $(".dropdown-button").dropdown();
+    });
+  </script>-->
+   <nav>
+    <div class="nav-wrapper">
+      <div class="row">
+        <div class="col l4 s12 m6">
+           <a href="#" class="brand-logo">
+            <img id="imgLogo" src="/resources/logo.png" alt="logo" />
+            <span>
+              REACTION COMMERCE
+            </span>
+          </a>
+        </div>
+        <div class="col l4 s12 m6" id="searchDiv">
+          <div class="input-field col s12">
+              <i class="fa fa-search prefix"></i>
+              <input id="txtSearch" type="text" class="validate">
+              <!--{{> React IconButtonComponent}}-->
+          </div>
+          <!--<i class="fa fa-search" aria-hidden="true"></i>
+          <input type="text" />-->
+        </div>
+        <div class="col l4 s12 m6">
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li>
+              <a href="#">
+               {{> i18nChooser}}
+              </a>
+            </li>
+            <li>
+              <!--<a class="dropdown-button" href="#!" data-activates="dropdown2">
+                Account
+                <span><i class="fa fa-chevron-circle-down"></i></span>
+              </a>-->
+              <a href="#">
+                {{> accounts tpl="loginDropdown"}}
+              </a>
+             
+            </li> 
+            <li>
+              <a href="#">
+                <!--cart
+                <i class="mdi mdi-cart-outline"></i>-->
+                <div class="cart">{{> cartIcon}}</div>
+                <div class="cart-alert">{{> cartPanel}}</div>
+              </a>
+              
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+  {{ domLoad }}
+</template>
