@@ -1,0 +1,99 @@
+@mega-menu-color: #ffffff;
+@mega-menu-height: 480px;
+@banner-height: 400px;
+@light-blue-color: #42A5F5;
+@navy-blue-color: rgb(37, 50, 69);
+@orange-color: #f57c00;
+
+// Megamenu
+#mega-menu{
+  height: @mega-menu-height;
+  background-color: @mega-menu-color;
+}
+.bx-wrapper{
+  height: 450px;
+  border: none !important;
+}
+.bx-viewport{
+  height: 440px;
+}
+.bx-wrapper img{
+  height: 439px;
+  width: 100%;
+}
+.mega-menu-items{
+  margin: 0px;
+  padding-bottom: 0px;
+}
+.mega-menu-items ul{
+  padding-top: 10px;
+  padding-bottom: 0px;
+  height: auto;
+}
+.mega-menu-item{
+  height: 25px;
+  width: 100%;
+  line-height: 25px;
+  display: table;
+  margin-bottom: 8px;
+}
+.mega-menu-item:last-child{
+  margin-bottom: 0px;
+}
+.mega-menu-item:hover{
+  border-top: 1px solid @navy-blue-color;
+  border-bottom: 1px solid @navy-blue-color;
+}
+.mega-menu-item i.cat-icon{
+  font-size: 16px;
+  color: @navy-blue-color;
+  width: 25px;
+  text-align: center;
+}
+.mega-menu-item .category{
+  display: table-cell;
+  text-transform: uppercase;
+  font-size: 12px;
+  position: relative;
+  padding-left: 10px;
+}
+.mega-menu-item i.fa-angle-right{
+  position: absolute;
+  right: -3px;
+  line-height: 25px;
+  font-size: 12px;
+}
+
+// Submenu
+.submenu{
+  position: absolute;
+  left: 221px;
+  top: 0px;
+  width: 380px;
+  height: @mega-menu-height;
+  background-color: #fff;
+  padding: 0px 10px;
+  z-index: 10;  
+  display: none;
+}
+.submenu li:first-child a{
+  font-weight: 700;
+  color: @navy-blue-color;
+}
+.submenu li{
+  text-transform: capitalize;
+  font-size: 12px;
+}
+
+// Special offer
+.offer-info{
+  text-align: center;
+  margin-top: 1em;
+}
+.offer-title{
+  font-weight: 500;
+}
+.offer-description{
+  text-transform: capitalize;
+}
+
