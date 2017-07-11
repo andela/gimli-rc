@@ -4,16 +4,16 @@
   {{> gimliHeader}}
   <!-- end layoutHeader -->
 <!--</nav>-->
-
-<nav class="reaction-cart-drawer">
-  {{>cartDrawer}}
-</nav>
-  <main>
+  <main class="maincontent">
+    <div>
+      {{> megaMenu}}
+    </div>
     <div class="product-div">
       {{> gimliProducts}}
     </div>
+    <div>
+      {{> workFlow}}
+    </div>
   </main>
-  <div>
-    {{> megaMenu}}
-  </div>
+  {{> gimliFooter}}
 </template>
