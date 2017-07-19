@@ -43,10 +43,40 @@ Template.searchModal.onCreated(function () {
     }
   });
 
+// AUDAX EDITTED HERE
+  /*
+  * Sort and Filter helpers
+  *
+  * Filter products by price */
+  const priceFilter = (products, query) =>  {
+    return products.filter((product) => {
+      if (product.price) {
+        if (product.price.max >= query[0] && product.price.min <= query[1]) {
+          return product;
+        }
+      }
+    });
+  };
+
+  // Sort products by price
+  const sortProducts = (products, type) => {
+    return products.sort((a, b) => {
+      const productPrice = a.price ? a.price.min : -1;
+      const nextProductPrice = b.price ? b.price.min : -1;
+      if (type === "ASC") {
+        return productPrice - nextProductPrice;
+      }
+      return nextProductPrice - productPrice;
+    });
+  };
+  // AUDAX ENDS HERE
+
 
   this.autorun(() => {
     const searchCollection = this.state.get("searchCollection") || "products";
     const searchQuery = this.state.get("searchQuery");
+    const priceQuery = this.state.get("priceFilter");
+    const sortQuery = this.state.get("sortValue");
     const facets = this.state.get("facets") || [];
     const sub = this.subscribe("SearchResults", searchCollection, searchQuery, facets);
 
@@ -55,7 +85,18 @@ Template.searchModal.onCreated(function () {
        * Product Search
        */
       if (searchCollection === "products") {
-        const productResults = ProductSearch.find().fetch();
+      //  const productResults = ProductSearch.find().fetch();
+      //  AUDAX EDIITED HERE
+        let productResults = ProductSearch.find().fetch();
+        if (priceQuery && priceQuery !== "all") {
+          const range = priceQuery.split("-");
+          productResults =  priceFilter(productResults, range);
+        }
+        if (sortQuery && sortQuery !== "null") {
+          productResults = sortProducts(productResults, sortQuery);
+        }
+        // AUDAX ENDS HERE
+
         const productResultsCount = productResults.length;
         this.state.set("productSearchResults", productResults);
         this.state.set("productSearchCount", productResultsCount);
@@ -184,6 +225,12 @@ Template.searchModal.events({
       Blaze.remove(view);
     });
   },
+  // AUDAX EDITTED HERE
+  "click [data-event-action=toggleFilter]": function () {
+    $(".sort-filter-div").toggle();
+    $(".product-search-result-div").toggleClass("col-md-10");
+  },
+  // AUDAX ENDS HERE
   "click [data-event-action=clearSearch]": function (event, templateInstance) {
     $("#search-input").val("");
     $("#search-input").focus();
