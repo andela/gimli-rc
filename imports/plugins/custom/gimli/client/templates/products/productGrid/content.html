@@ -1,0 +1,22 @@
+<template name="gimliSingleProduct">
+  <div class="a">
+    <a href="{{pathFor 'product' handle=handle}}" data-event-category="grid" data-event-action="product-click" data-event-label="grid product click" data-event-value="{{_id}}">
+      <div class="product-desc">
+        <h6>{{title}}</h6>
+      </div>
+      <div class="product-price">
+        <h6>₦1,000,000 <span>₦1,200,00</span></h6>
+      </div>
+      <div class="product-vendor">
+        <h6>Vendor <span>Cele Mobiles</span></h6>
+      </div>
+      <div class="product-stock">
+        <h6>IN STOCK: 50</h6>
+      </div>
+      <!-- <div class="overlay">
+        <div class="overlay-title">{{title}}</div>
+        <div class="currency-symbol">{{formatPrice displayPrice}}</div>
+      </div> -->
+    </a>
+  </div>
+</template>

@@ -67,7 +67,6 @@ Template.productGrid.events({
     Session.set("productGrid/selectedProducts", _.uniq(selectedProducts));
 
     const products = Template.currentData().products;
-
     if (products) {
       const filteredProducts = _.filter(products, (product) => {
         return _.includes(selectedProducts, product._id);
