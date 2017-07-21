@@ -8,6 +8,7 @@ import { RevisionApi } from "/imports/plugins/core/revisions/lib/api/revisions";
  * @return {Object} return product cursor
  */
 Meteor.publish("Product", function (productId) {
+  Logger.info("I came here", productId);
   check(productId, Match.OptionalOrNull(String));
   if (!productId) {
     Logger.info("ignoring null request on Product subscription");
