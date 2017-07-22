@@ -1,10 +1,10 @@
 import "./defaults";
+import "./styles/main.less";
 import "./styles/header.less";
 import "./styles/footer";
 import "./styles/bootstrap.less";
 import "./styles/products.less";
 import "./styles/megaMenu.less";
-import "./styles/main.less";
 import "./components/navbar/navbar.html";
 import "./components/navbar/navbar";
 import "./components/tagNav/tagNav.html";

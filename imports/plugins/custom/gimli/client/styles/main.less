@@ -1,3 +1,57 @@
+@import "./colorTheme.less";
+
+a:active, a:focus, a:link{
+  outline: none !important;
+}
 #home-page.body{
   padding: 0em 2em;
+}
+.brand .title{
+  color: @light-blue-color !important;
+}
+.rui.navbar{
+  background-color: @navy-blue-color!important;
+  padding: 0em 0.8em;
+  color: #fff;
+}
+.cart-icon{
+  background-color: transparent !important;
+}
+.cart-icon .badge{
+  background-color: @orange-color;
+}
+.rui.navbar span, .rui.navbar a.tag, .rui.navbar a:hover,
+.navbar-item a.tag, .dropdown i, .dropdown .caret{
+  color: #fff;
+}
+.rui.tagnav span, .rui.tagnav .dropdown-toggle,
+.rui.tagnav a, .rui.tagnav a:hover{
+  color: @text-color;
+}
+.rui.navbar a:hover, .rui.tagnav .navbar-items > .navbar-item:hover,
+.rui.tagnav.vertical .navbar-header .close-button:hover{
+  background-color: rgba(245, 124, 0, 0.2) !important; 
+}
+.rui.navbar .search span{
+  color: @orange-color;
+}
+.rui.navbar .search:hover{
+  background-color: transparent;
+}
+.dropdown{
+  border-bottom: 2px solid transparent;  
+}
+.dropdown:hover{
+  background-color: transparent !important;
+  border-bottom: 2px solid @orange-color;
+}
+.dropdown-menu > .active > a {
+  background-color: @orange-color !important;
+}
+.dropdown-menu > li:not(.active) > a:hover{
+  background-color: rgba(245, 124, 0, 0.2);
+}
+.form-group button.btn-primary{
+  background-color: @orange-color;
+  border-color: @orange-color;
 }

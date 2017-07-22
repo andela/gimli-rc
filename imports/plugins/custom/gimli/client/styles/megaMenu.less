@@ -10,7 +10,7 @@
 #side-nav{
   padding-right: 0px;
 }
-#side-nav ul {
+#side-nav-items ul {
   list-style: none;
   padding: 0;
 }
@@ -20,6 +20,7 @@
   height: 25px;
   line-height: 25px;
   width: 100%;
+  padding: 0px 10px;
   margin-bottom: 0px;
 }
 .side-nav-item:last-child{
@@ -49,7 +50,7 @@
   border-top: 1px solid @navy-blue-color;
   border-bottom: 1px solid @navy-blue-color;
 }
-#side-nav .side-nav-item:hover .submenu{
+#side-nav-items .side-nav-item:hover .submenu{
   display: block;
 }
 .side-nav-item i.fa-angle-right{
@@ -58,7 +59,7 @@
   line-height: 25px;
   font-size: 12px;
 }
-#side-nav .submenu{
+#side-nav-items .submenu{
   display: none;
   position: absolute;
   height: 590px;
@@ -69,11 +70,11 @@
   padding: 0px 12px 0px 0px;
   z-index: 15;
 }
-#side-nav .submenu li a{
+#side-nav-items .submenu li a{
   text-decoration: none;
   text-transform: capitalize;
 }
-#side-nav .submenu li:first-child a{
+#side-nav-items .submenu li:first-child a{
   font-weight: 800;
 }
 .submenu .col-md-4{
