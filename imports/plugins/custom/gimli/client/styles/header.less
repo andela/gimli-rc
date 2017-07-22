@@ -1,5 +1,11 @@
 @import "./colorTheme.less";
-
+#main-header{
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 20;
+}
 .brand .title{
   color: @light-blue-color !important;
 }
@@ -13,21 +19,12 @@
 .cart-icon .badge{
   background-color: @orange-color;
 }
+
 .rui.navbar span, .navbar-item a.tag, .dropdown i{
   color: @text-color;
 }
-#search{
-  width: 250px;
-  margin: 0.8em auto 0px auto;
-}
-#search input.form-control,
-#search .input-group-addon{
-  border-radius: 0px !important;
-  border-color: @light-blue-color !important;
-}
-#search .input-group-addon{
-  background-color: @light-blue-color !important;
-  color: #fff;
+.rui.navbar span.search:hover{
+  background-color: transparent;
 }
 .rui.navbar .dropdown-toggle{
   color: @text-color;
@@ -40,7 +37,10 @@
   border-bottom: 2px solid @orange-color;
 }
 .dropdown-menu > .active > a {
-  background-color: @light-blue-color !important;
+  background-color: @orange-color !important;
+}
+.dropdown-menu > li:not(.active) > a:hover{
+  background-color: rgba(245, 124, 0, 0.2);
 }
 .form-group button.btn-primary{
   background-color: @orange-color;
