@@ -1,10 +1,8 @@
 import _ from "lodash";
-import React from "react";
-import { DataType } from "react-taco-table";
 import { Template } from "meteor/templating";
-import { i18next } from "/client/api";
 import { ProductSearch, Tags, OrderSearch, AccountSearch } from "/lib/collections";
-import { IconButton, SortableTable } from "/imports/plugins/core/ui/client/components";
+import { IconButton } from "/imports/plugins/core/ui/client/components";
+import { Session } from "meteor/session";
 
 /*
  * searchModal extra functions
@@ -43,7 +41,6 @@ Template.searchModal.onCreated(function () {
     }
   });
 
-// AUDAX EDITTED HERE
   /*
   * Sort and Filter helpers
   *
@@ -58,6 +55,11 @@ Template.searchModal.onCreated(function () {
     });
   };
 
+  // Filter products by brand
+  function vendorFilter(products, query) {
+    return products.filter(product => product.vendor === query);
+  }
+
   // Sort products by price
   const sortProducts = (products, type) => {
     return products.sort((a, b) => {
@@ -69,14 +71,13 @@ Template.searchModal.onCreated(function () {
       return nextProductPrice - productPrice;
     });
   };
-  // AUDAX ENDS HERE
-
 
   this.autorun(() => {
     const searchCollection = this.state.get("searchCollection") || "products";
     const searchQuery = this.state.get("searchQuery");
-    const priceQuery = this.state.get("priceFilter");
-    const sortQuery = this.state.get("sortValue");
+    const priceQuery = Session.get("priceFilter");
+    const vendorQuery = Session.get("vendorFilter");
+    const sortQuery = Session.get("sortValue");
     const facets = this.state.get("facets") || [];
     const sub = this.subscribe("SearchResults", searchCollection, searchQuery, facets);
 
@@ -85,18 +86,19 @@ Template.searchModal.onCreated(function () {
        * Product Search
        */
       if (searchCollection === "products") {
-      //  const productResults = ProductSearch.find().fetch();
-      //  AUDAX EDIITED HERE
         let productResults = ProductSearch.find().fetch();
+        const searchedVendors = _.uniq(_.map(productResults, "vendor"));
+        Session.set("searchedVendors", searchedVendors);
         if (priceQuery && priceQuery !== "all") {
           const range = priceQuery.split("-");
           productResults =  priceFilter(productResults, range);
         }
+        if (vendorQuery && vendorQuery !== "all") {
+          productResults = vendorFilter(productResults, vendorQuery);
+        }
         if (sortQuery && sortQuery !== "null") {
           productResults = sortProducts(productResults, sortQuery);
         }
-        // AUDAX ENDS HERE
-
         const productResultsCount = productResults.length;
         this.state.set("productSearchResults", productResults);
         this.state.set("productSearchCount", productResultsCount);
@@ -167,7 +169,6 @@ Template.searchModal.helpers({
     return {
       component: IconButton,
       icon: "fa fa-times",
-      kind: "close",
       onClick() {
         $(".js-search-modal").fadeOut(400, () => {
           $("body").css("overflow", "visible");
@@ -225,12 +226,9 @@ Template.searchModal.events({
       Blaze.remove(view);
     });
   },
-  // AUDAX EDITTED HERE
   "click [data-event-action=toggleFilter]": function () {
-    $(".sort-filter-div").toggle();
-    $(".product-search-result-div").toggleClass("col-md-10");
+    $(".js-search-modal").toggleClass("filters-on");
   },
-  // AUDAX ENDS HERE
   "click [data-event-action=clearSearch]": function (event, templateInstance) {
     $("#search-input").val("");
     $("#search-input").focus();

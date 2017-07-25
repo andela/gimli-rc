@@ -1,13 +1,20 @@
+import { Session } from "meteor/session";
 import { Template } from "meteor/templating";
 
-const instance = Template.instance();
-
+Template.sortFilter.helpers({
+  getVendors() {
+    return Session.get("searchedVendors");
+  }
+});
 
 Template.sortFilter.events({
   "change #price-filter": function (event) {
-    instance.state.set("priceFilter", event.target.value);
+    Session.set("priceFilter", event.target.value);
+  },
+  "change #brand-filter": function (event) {
+    Session.set("vendorFilter", event.target.value);
   },
   "change #sort-value": function (event) {
-    instance.state.set("sortValue", event.target.value);
+    Session.set("sortValue", event.target.value);
   }
 });
