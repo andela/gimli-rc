@@ -33,6 +33,7 @@ class ProductAdminContainer extends Component {
   }
 
   handleFieldChange = (field, value) => {
+    console.log('cele.............', field, value);
     const newState = update(this.state, {
       product: {
         $merge: {
