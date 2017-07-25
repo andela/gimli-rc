@@ -131,7 +131,7 @@ Template.coreOrderShippingTracking.helpers({
     return shipment.packed && shipment.tracking;
   },
 
-  // check of the order has been cancelled
+  // check whether the order has been cancelled
   orderCanceled() {
     const order = Template.instance().order;
 
