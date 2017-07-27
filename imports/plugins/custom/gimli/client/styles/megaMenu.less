@@ -1,11 +1,14 @@
 @import "./colorTheme.less";
 
-@mega-menu-height: 700px;
+@mega-menu-height: 421px;
 #mega-menu{
-  padding-top: 5em;
+  padding-top: 4em;
   height: @mega-menu-height;
   background-color: #fff;
-  margin-bottom: 12px;  
+  margin-bottom: 8px;  
+}
+#mega-menu #banner{
+  padding: 0px !important;
 }
 #side-nav{
   padding-right: 0px;
@@ -62,9 +65,9 @@
 #side-nav-items .submenu{
   display: none;
   position: absolute;
-  height: 590px;
+  height: 365px;
   width: 650px;
-  left: 224px;
+  left: 200px;
   top: 0px;
   background-color: #fff;
   padding: 0px 12px 0px 0px;
@@ -82,6 +85,12 @@
 }
 #mega-menu .bx-wrapper{
   box-shadow: none;
+}
+#mega-menu .bx-viewport{
+  height: 355px !important;
+  img{
+    height: inherit;
+  }
 }
 #mega-menu .bx-prev, #mega-menu .bx-next{
   z-index: 0;
