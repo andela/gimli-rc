@@ -1,22 +1,10 @@
 import React, { Component, PropTypes} from "react";
+import Variant from "./variant";
 import { EditContainer } from "/imports/plugins/core/ui/client/containers";
 import { Divider, Translation } from "/imports/plugins/core/ui/client/components";
 import { ChildVariant } from "./";
 
 class VariantList extends Component {
-
-  componentDidMount = () => {
-    if ($("body").find((".owl-carousel")).length > 0) {
-      $(".owl-carousel").owlCarousel({
-        items: 1,
-        loop: true,
-        margin: 10,
-        autoplay: true,
-        autoplayTimeout: 5000,
-        autoplayHoverPause: true
-      });
-    }
-  }
 
   handleVariantEditClick = (event, editButtonProps) => {
     if (this.props.onEditVariant) {
@@ -56,6 +44,8 @@ class VariantList extends Component {
   renderVariants() {
     if (this.props.variants) {
       return this.props.variants.map((variant, index) => {
+        const displayPrice = this.props.displayPrice && this.props.displayPrice(variant._id);
+
         return (
           <EditContainer
             data={variant}
@@ -63,12 +53,23 @@ class VariantList extends Component {
             editView="variantForm"
             i18nKeyLabel="productDetailEdit.editVariant"
             key={index}
-            label={<span>Click to add price and variants </span>}
+            label="Edit Variant"
             onEditButtonClick={this.handleVariantEditClick}
             onVisibilityButtonClick={this.handleVariantVisibilityClick}
             permissions={["createProduct"]}
             showsVisibilityButton={true}
-          />
+          >
+            <Variant
+              displayPrice={displayPrice}
+              editable={this.props.editable}
+              index={index}
+              isSelected={this.props.variantIsSelected(variant._id)}
+              onClick={this.props.onVariantClick}
+              onMove={this.props.onMoveVariant}
+              soldOut={this.isSoldOut(variant)}
+              variant={variant}
+            />
+          </EditContainer>
         );
       });
     }
@@ -122,21 +123,19 @@ class VariantList extends Component {
   render() {
     return (
       <div className="product-variants">
-        {/** <Divider
+        <Divider
           i18nKeyLabel="productDetail.options"
           label="Options"
-        /> **/}
+        />
+        <ul className="variant-list list-unstyled" id="variant-list">
+          {this.renderVariants()}
+        </ul>
         <Divider
           i18nKeyLabel="productDetail.availableOptions"
           label="Available Options"
         />
         <div className="row variant-product-options">
-          <ul className="variant-list list-unstyled" id="variant-list">
-            <span style={{float: "right"}}>{this.renderVariants()}</span>
-          </ul>
-          <div className="owl-carousel">
-            {this.renderChildVariants()}
-          </div>
+          {this.renderChildVariants()}
         </div>
       </div>
     );

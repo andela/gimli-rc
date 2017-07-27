@@ -12,8 +12,6 @@ class AddToCartButton extends Component {
   render() {
     return (
       <div className="pdp add-to-cart block">
-      <p>
-        Quantity:&nbsp;
         <input
           className="form-control input-md"
           id="add-to-cart-quantity"
@@ -23,8 +21,6 @@ class AddToCartButton extends Component {
           type="number"
           value={this.props.cartQuantity}
         />
-      </p>
-      <p>
         <button
           className="input-group-addon add-to-cart-text js-add-to-cart"
           data-i18n="productDetail.addToCart"
@@ -32,7 +28,6 @@ class AddToCartButton extends Component {
         >
           <Translation defaultValue="Add to cart" i18nKey="productDetail.addToCart" />
         </button>
-      </p>
       </div>
     );
   }
