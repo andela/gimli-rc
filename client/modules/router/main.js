@@ -181,6 +181,15 @@ Router.initPackageRoutes = () => {
         ReactionLayout(Session.get("INDEX_OPTIONS") || {});
       }
     });
+    /**
+     * redirect user to wallet page
+     */
+    shop.route("/wallet", {
+      name: "wallet",
+      action() {
+        ReactionLayout({ template: "wallet" });
+      }
+    });
 
     // get package registry route configurations
     for (const pkg of pkgs) {

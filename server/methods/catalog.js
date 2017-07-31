@@ -181,6 +181,7 @@ function copyMedia(newId, variantOldId, variantNewId) {
  * @return {Number} - number of successful update operations. Should be "1".
  */
 function denormalize(id, field) {
+  Logger.info('celestine says', id);
   const doc = Products.findOne(id);
   let variants;
   if (doc.type === "simple") {
@@ -460,7 +461,7 @@ Meteor.methods({
    * updateProductField", but it still used
    * @return {Number} returns update result
    */
-  "products/updateVariant": function (variant) {
+  "products/updateVariant": (variant) => {
     check(variant, Object);
     // must have createProduct permissions
     if (!Reaction.hasPermission("createProduct")) {
@@ -790,24 +791,42 @@ Meteor.methods({
       const stringValue = EJSON.stringify(value);
       update = EJSON.parse("{\"" + field + "\":" + stringValue + "}");
     }
+    Logger.error('.......................', _id, field, value, update, type);
 
     // we need to use sync mode here, to return correct error and result to UI
-    const result = Products.update(_id, {
+    const result = Products.update({_id: _id}, {
       $set: update
     }, {
       selector: {
         type: type
       }
     });
-
+    Logger.info('check what  ~toDenormalize.indexOf(field retuns',
+    ~toDenormalize.indexOf(field),
+    toDenormalize.indexOf(field),
+    doc.ancestors[0],
+    result,
+    );
+    denormalize(doc.ancestors[0], field);
     if (typeof result === "number") {
       if (type === "variant" && ~toDenormalize.indexOf(field)) {
+        Logger.info('came here because it is a variant');
         denormalize(doc.ancestors[0], field);
       }
+      Logger.info('came here oh ................');
+      denormalize(doc.ancestors[0], field);
     }
     return result;
   },
-
+  /**
+   * products/updateAncestor
+   * @summary method to update ancestor price
+   * @param {string} productId - productId
+   * @param {Number}  newprice - new price of variant
+   */
+  "products/updateAncestor": function (productId, newprice) {
+    // check if product has an ancestor
+  },
   /**
    * products/updateProductTags
    * @summary method to insert or update tag with hierarchy
@@ -1099,6 +1118,7 @@ Meteor.methods({
       throw new Meteor.Error(403, "Access Denied");
     }
 
+    
     // update existing metadata
     if (typeof meta === "object") {
       return Products.update({

@@ -87,8 +87,8 @@ class NumericInput extends React.Component {
     // console.log(moneyFormat, value, value * Math.pow(10, 2 - moneyFormat.precision));
     const decimal = moneyFormat.decimal || undefined;
     const unformatedValue = this.unformat(value, decimal);
-
-    return accounting.formatMoney(unformatedValue, moneyFormat);
+    // add naira sysmbol to value
+    return accounting.formatMoney(unformatedValue, { symbol: "₦", format: "%s%v" }, moneyFormat);
   }
 
   /**
