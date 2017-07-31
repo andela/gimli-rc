@@ -663,7 +663,7 @@ Meteor.methods({
     if (!Reaction.hasPermission("createProduct")) {
       throw new Meteor.Error(403, "Access Denied");
     }
-
+    console.log(product);
     // if a product object was provided
     if (product) {
       return Products.insert(product);
@@ -674,6 +674,7 @@ Meteor.methods({
     }, {
       validate: false
     }, (error, result) => {
+      console.log(result);
       // additionally, we want to create a variant to a new product
       if (result) {
         Products.insert({

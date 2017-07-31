@@ -1,0 +1,1 @@
+Template.gimliHeader.replaces("layoutHeader");
