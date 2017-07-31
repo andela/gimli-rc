@@ -1,0 +1,12 @@
+<template name="gimliSingleProductPage">
+  <div class="row mt-54 m-600">
+    {{#if isEnabled}}
+      {{!-- Use new product detail page --}}
+      <div>
+        {{> React component=PDC}}
+      </div>
+    {{else}}
+      <h2>Hello</h2>
+    {{/if}}
+  </div>
+</template>

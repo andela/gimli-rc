@@ -1,0 +1,1 @@
+Template.gimliFooter.replaces("layoutFooter");

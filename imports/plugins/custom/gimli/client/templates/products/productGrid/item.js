@@ -1,0 +1,1 @@
+Template.gimliProductRow.replaces("productGridItems");
