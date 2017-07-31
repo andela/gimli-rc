@@ -22,3 +22,9 @@ Template.ordersListSummary.helpers({
     };
   }
 });
+
+Template.ordersListSummary.events({
+  "click #cancelOrderButton": function () {
+    
+  }
+});
