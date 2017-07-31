@@ -24,7 +24,6 @@ function loadMoreProducts() {
 
   if (target.length) {
     threshold = scrollContainer.scrollTop() + scrollContainer.height() - target.height();
-
     if (target.offset().top < threshold) {
       if (!target.data("visible")) {
         target.data("productScrollLimit", true);
@@ -72,7 +71,7 @@ Template.products.onCreated(function () {
 
     const queryParams = Object.assign({}, tags, Reaction.Router.current().queryParams);
     this.subscribe("Products", scrollLimit, queryParams);
-
+    // this is where they are querying the databse for the products
     // we are caching `currentTag` or if we are not inside tag route, we will
     // use shop name as `base` name for `positions` object
     const currentTag = ReactionProduct.getTag();
@@ -85,7 +84,8 @@ Template.products.onCreated(function () {
         [`positions.${currentTag}.position`]: 1,
         [`positions.${currentTag}.createdAt`]: 1,
         createdAt: 1
-      }
+      },
+      limit: 5
     });
 
     const products = productCursor.map((product) => {

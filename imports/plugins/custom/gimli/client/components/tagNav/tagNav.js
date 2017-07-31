@@ -1,0 +1,1 @@
+Template.gimliTagNav.replaces("tagNav");

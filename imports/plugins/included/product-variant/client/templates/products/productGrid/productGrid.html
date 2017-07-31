@@ -2,6 +2,25 @@
   <div class="container-main">
     <div class="product-grid">
       <ul class="product-grid-list list-unstyled" id="product-grid-list">
+        <!-- DealZone display starts here -->
+        <div class="col-12 col-xs-6 col-sm-4 col-md-3 col-lg-2 ps-10">
+          <div class="product-col product-deal border-2">
+            <div class="header bg-2">
+              <h5 class="big">MOBILE DEALZONE</h5>
+            </div>
+            <div class="content p-10">
+              <div class="real-image">
+                <img src="/resources/images/iphone_7a.png" class="responsive-img" alt="iphone">
+              </div>
+              <div class="fixed-image bg-trans-2">
+                <img src="/resources/images/70off.png" class="responsive-img" alt="discount">
+              </div>
+              <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+          </div>
+        </div>
+        <!-- DealZone display ends here -->
         {{#each products}}
           {{> productGridItems}}
         {{else}}
