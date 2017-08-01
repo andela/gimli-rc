@@ -23,7 +23,6 @@ import "./templates/orderSearch/orderResults.js";
 import "./templates/accountSearch/accountResults.html";
 import "./templates/accountSearch/accountResults.js";
 
-// AUDAX EDIITED HERE
 // Sort Filter
 import "./templates/searchModal/sortFilter.html";
 import "./templates/searchModal/sortFilter.js";
