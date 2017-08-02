@@ -10,8 +10,6 @@ import {
 } from "/imports/plugins/core/ui/client/components/";
 import {
   AddToCartButton,
-  ProductMetadata,
-  ProductTags,
   ProductField
 } from "./";
 import { AlertContainer } from "/imports/plugins/core/ui/client/containers";
@@ -75,106 +73,98 @@ class ProductDetail extends Component {
   }
 
   render() {
+    const props = this.props;
     return (
       <div className="" style={{position: "relative"}}>
         {this.renderToolbar()}
 
         <div className="container-main container-fluid pdp-container" itemScope itemType="http://schema.org/Product">
           <AlertContainer placement="productManagement" />
-
-          <header className="pdp header">
-            <ProductField
-              editable={this.editable}
-              fieldName="title"
-              fieldTitle="Title"
-              element={<h1 />}
-              onProductFieldChange={this.props.onProductFieldChange}
-              product={this.product}
-              textFieldProps={{
-                i18nKeyPlaceholder: "productDetailEdit.title",
-                placeholder: "Title"
-              }}
-            />
-
-            <ProductField
-              editable={this.editable}
-              fieldName="pageTitle"
-              fieldTitle="Sub Title"
-              element={<h2 />}
-              onProductFieldChange={this.props.onProductFieldChange}
-              product={this.product}
-              textFieldProps={{
-                i18nKeyPlaceholder: "productDetailEdit.pageTitle",
-                placeholder: "Subtitle"
-              }}
-            />
-          </header>
-
-
-          <div className="pdp-content">
-            <div className="pdp column left pdp-left-column">
+          <div className="breadcrumbs">
+            <ul>
+              <li><a href="#">Home</a></li>
+              <li><a href="#">{props.product.title}</a></li>
+            </ul>
+          </div>
+          <div className="row content">
+            <div className="col-sm-4">
               {this.props.mediaGalleryComponent}
-              <ProductTags editable={this.props.editable} product={this.product} tags={this.tags} />
-              <ProductMetadata editable={this.props.editable} product={this.product} />
             </div>
-
-            <div className="pdp column right pdp-right-column">
-
-
-              <div className="pricing">
-                <div className="left">
-                  <span className="price">
-                    <span id="price">
-                      <Currency amount={this.props.priceRange} />
-                    </span>
-                  </span>
+            <div className="col-sm-8">
+              <div className="col-sm-8">
+                <div className="main">
+                  <ProductField
+                    editable={this.editable}
+                    fieldName="title"
+                    fieldTitle="Title"
+                    element={<h2 />}
+                    onProductFieldChange={this.props.onProductFieldChange}
+                    product={this.product}
+                    textFieldProps={{
+                      i18nKeyPlaceholder: "productDetailEdit.title",
+                      placeholder: "Title"
+                    }}
+                  />
+                  <div className="vendor">
+                    <span>Brand: </span>
+                    <ProductField
+                      editable={this.editable}
+                      fieldName="pageTitle"
+                      fieldTitle="Brand"
+                      element={<span />}
+                      onProductFieldChange={this.props.onProductFieldChange}
+                      product={this.product}
+                      textFieldProps={{
+                        i18nKeyPlaceholder: "productDetailEdit.pageTitle",
+                        placeholder: "Subtitle"
+                      }}
+                    />
+                  </div>
+                  <div className="line" />
+                  <div className="description">
+                    <h2>Description</h2>
+                    <ProductField
+                      editable={this.editable}
+                      fieldName="description"
+                      fieldTitle="Description"
+                      multiline={true}
+                      onProductFieldChange={this.props.onProductFieldChange}
+                      product={this.product}
+                      textFieldProps={{
+                        i18nKeyPlaceholder: "productDetailEdit.description",
+                        placeholder: "Description"
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <div className="col-sm-6">
+                      <div className="pricing">
+                        <div className="left">
+                          <span className="price">
+                            <span id="price">
+                              <Currency amount={this.props.priceRange} />
+                            </span>
+                          </span>
+                        </div>
+                        <div className="right">
+                          {this.props.socialComponent}
+                        </div>
+                      </div>
+                    </div>
+                   <div className="col-sm-6">
+                      <AlertContainer placement="productDetail" />
+                      <AddToCartButton
+                        cartQuantity={this.props.cartQuantity}
+                        onCartQuantityChange={this.props.onCartQuantityChange}
+                        onClick={this.props.onAddToCart}
+                      />
+                   </div>
+                  </div>
                 </div>
-                <div className="right">
-                  {this.props.socialComponent}
-                </div>
               </div>
 
-
-              <div className="vendor">
-                <ProductField
-                  editable={this.editable}
-                  fieldName="vendor"
-                  fieldTitle="Vendor"
-                  onProductFieldChange={this.props.onProductFieldChange}
-                  product={this.product}
-                  textFieldProps={{
-                    i18nKeyPlaceholder: "productDetailEdit.vendor",
-                    placeholder: "Vendor"
-                  }}
-                />
-              </div>
-
-              <div className="pdp product-info">
-                <ProductField
-                  editable={this.editable}
-                  fieldName="description"
-                  fieldTitle="Description"
-                  multiline={true}
-                  onProductFieldChange={this.props.onProductFieldChange}
-                  product={this.product}
-                  textFieldProps={{
-                    i18nKeyPlaceholder: "productDetailEdit.description",
-                    placeholder: "Description"
-                  }}
-                />
-              </div>
-
-              <div className="options-add-to-cart">
+              <div className="col-sm-4">
                 {this.props.topVariantComponent}
-              </div>
-              <hr />
-              <div>
-                <AlertContainer placement="productDetail" />
-                <AddToCartButton
-                  cartQuantity={this.props.cartQuantity}
-                  onCartQuantityChange={this.props.onCartQuantityChange}
-                  onClick={this.props.onAddToCart}
-                />
               </div>
             </div>
           </div>

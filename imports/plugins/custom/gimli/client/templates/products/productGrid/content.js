@@ -1,0 +1,1 @@
+Template.gimliSingleProduct.replaces("gridContent");

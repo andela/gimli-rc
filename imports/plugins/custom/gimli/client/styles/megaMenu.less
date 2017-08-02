@@ -1,0 +1,107 @@
+@import "./colorTheme.less";
+
+@mega-menu-height: 421px;
+#mega-menu{
+  padding-top: 4em;
+  height: @mega-menu-height;
+  background-color: #fff;
+  margin-bottom: 8px;  
+}
+#mega-menu #banner{
+  padding: 0px !important;
+}
+#side-nav{
+  padding-right: 0px;
+}
+#side-nav-items ul {
+  list-style: none;
+  padding: 0;
+}
+
+.side-nav-item{
+  display: table;
+  height: 25px;
+  line-height: 25px;
+  width: 100%;
+  padding: 0px 10px;
+  margin-bottom: 0px;
+}
+.side-nav-item:last-child{
+  margin-bottom: 0px;
+}
+.side-nav-item a{
+  color: @text-color;
+  font-size: 11px;
+}
+.side-nav-item a.category{
+  display: table-cell;
+  text-transform: uppercase;
+  font-size: 11px;
+  position: relative;
+  padding: 0px;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}
+.side-nav-item a.category > .cat-icon{
+  display: inline-block;
+  text-align: center;
+  width: 15px;
+  margin-right: 0.2em;
+}
+.side-nav-item:hover a.category{
+  text-decoration: none;
+  border-top: 1px solid @navy-blue-color;
+  border-bottom: 1px solid @navy-blue-color;
+}
+#side-nav-items .side-nav-item:hover .submenu{
+  display: block;
+}
+.side-nav-item i.fa-angle-right{
+  position: absolute;
+  right: 0px;
+  line-height: 25px;
+  font-size: 12px;
+}
+#side-nav-items .submenu{
+  display: none;
+  position: absolute;
+  height: 365px;
+  width: 650px;
+  left: 200px;
+  top: 0px;
+  background-color: #fff;
+  padding: 0px 12px 0px 0px;
+  z-index: 15;
+}
+#side-nav-items .submenu li a{
+  text-decoration: none;
+  text-transform: capitalize;
+}
+#side-nav-items .submenu li:first-child a{
+  font-weight: 800;
+}
+.submenu .col-md-4{
+  margin-bottom: 15px;
+}
+#mega-menu .bx-wrapper{
+  box-shadow: none;
+}
+#mega-menu .bx-viewport{
+  height: 355px !important;
+  img{
+    height: inherit;
+  }
+}
+#mega-menu .bx-prev, #mega-menu .bx-next{
+  z-index: 0;
+}
+.offer-info{
+  text-align: center;
+  margin-top: 1em;
+}
+.offer-title{
+  font-weight: 500;
+}
+.offer-description{
+  text-transform: capitalize;
+}
