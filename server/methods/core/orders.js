@@ -922,5 +922,88 @@ Meteor.methods({
       throw new Meteor.Error(
         "Attempt to refund transaction failed", result.error);
     }
+  },
+  /**
+   * orders/shipmentCanceled
+   *
+   * @summary trigger shipmentCanceled status and workflow update
+   * @param {Object} order - order object
+   * @param {Object} shipment - shipment object
+   * @return {Object} return results of several operations
+   */
+  "orders/shipmentCanceled": function (order, shipment) {
+    check(order, Object);
+    check(shipment, Object);
+
+    if (!Reaction.hasPermission("orders")) {
+      Logger.error("User does not have 'orders' permissions");
+      throw new Meteor.Error("access-denied", "Access Denied");
+    }
+
+    this.unblock();
+
+    const itemIds = shipment.items.map((item) => {
+      return item._id;
+    });
+
+    const workflowResult = Meteor.call("workflow/pushItemWorkflow", "coreOrderItemWorkflow/canceled", order, itemIds);
+
+    return {
+      workflowResult: workflowResult
+    };
+  },
+  /**
+   * orders/cancelOrder
+   *
+   * @summary Cancel an order that hasn't been shipped
+   * @param {String} orderId - order object
+   * @return {null} no return value
+   */
+  "orders/cancelOrder": function (orderId) {
+    check(orderId, String);
+
+    if (!Reaction.hasPermission("orders")) {
+      throw new Meteor.Error(403, "Access Denied");
+    }
+
+    // order and billing information
+    const order = Orders.findOne(orderId);
+    const paymentMethod = order.billing[0].paymentMethod;
+    const paymentStatus = paymentMethod.status;
+    const amount = paymentMethod.amount;
+    const shipment = order.shipping[0];
+
+    // if payment has been captured
+    if (paymentStatus === "completed") {
+      // Refund money
+      Meteor.call("orders/refunds/create", orderId, paymentMethod, amount, (error) => {
+        if (error) {
+          Alerts.alert(error.reason);
+        } else {
+          // send an email to the user
+          Meteor.call("orders/sendCancelNotification", order, (err) => {
+            if (err) {
+              Logger.error(err, "orders/orderCanceled: Failed to send notification");
+            }
+          });
+        }
+      });
+    } else {
+      // send an email to the user
+      Meteor.call("orders/sendCancelNotification", order, (err) => {
+        if (err) {
+          Logger.error(error, "orders/orderCanceled: Failed to send notification");
+        }
+      });
+    }
+
+    // change the shipping status to canceled
+    Meteor.call("orders/shipmentCanceled", order, shipment);
+    // Change status of the order to canceled
+    completedOrderResult = Meteor.call("workflow/pushOrderWorkflow", "coreOrderWorkflow", "canceled", order);
+
+    // TODO: Restock the inventory
+
+    return null;
   }
 });
