@@ -13,6 +13,9 @@ const orderFilters = [{
 }, {
   name: "completed",
   label: "Completed"
+}, {
+  name: "canceled",
+  label: "Canceled"
 }];
 
 const OrderHelper =  {
@@ -61,7 +64,7 @@ const OrderHelper =  {
 
       case "canceled":
         query = {
-          "workflow.status": "canceled"
+          "workflow.status": "coreOrderWorkflow/canceled"
         };
         break;
 
@@ -317,19 +320,35 @@ Template.orderStatusDetail.helpers({
         }
       }
     });
+    const canceled = _.every(shipment.items, (shipmentItem) => {
+      for (const fullItem of self.items) {
+        if (fullItem._id === shipmentItem._id) {
+          if (fullItem.workflow) {
+            return fullItem.workflow.status === "coreOrderItemWorkflow/canceled";
+          }
+        }
+      }
+    });
 
     if (shipped) {
       return {
         shipped: true,
         status: "success",
-        label: i18next.t("orderShipping.shipped")
+        // label: i18next.t("orderShipping.shipped")
+        label: i18next.t("Shipped")
+      };
+    } else if (canceled) {
+      return {
+        shipped: false,
+        status: "danger",
+        label: i18next.t("Canceled")
       };
     }
 
     return {
       shipped: false,
       status: "info",
-      label: i18next.t("orderShipping.notShipped")
+      label: i18next.t("Not Shipped")
     };
   }
 });

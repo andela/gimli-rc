@@ -1,1 +1,3 @@
 Template.gimliNavBar.replaces("CoreNavigationBar");
+
+
