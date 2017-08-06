@@ -1,6 +1,5 @@
 import _ from "lodash";
 import path from "path";
-import twilio from "twilio";
 import moment from "moment";
 import accounting from "accounting-js";
 import Future from "fibers/future";
@@ -15,7 +14,6 @@ import { Logger, Reaction } from "/server/api";
  * Reaction Order Methods
  */
 Meteor.methods({
-
   /**
    * orders/shipmentTracking
    * @summary wraps addTracking and triggers workflow update
@@ -68,7 +66,7 @@ Meteor.methods({
    * @param {Boolean} packed - packed status
    * @return {Object} return workflow result
    */
-  "orders/shipmentPacked": (order, shipment, packed) => {
+  "orders/shipmentPacked": function (order, shipment, packed) {
     check(order, Object);
     check(shipment, Object);
     check(packed, Boolean);
@@ -114,7 +112,7 @@ Meteor.methods({
    * @param {Object} order - order object
    * @return {Object} Mongo update
    */
-  "orders/makeAdjustmentsToInvoice": (order) => {
+  "orders/makeAdjustmentsToInvoice": function (order) {
     check(order, Object);
 
     if (!Reaction.hasPermission("orders")) {
@@ -138,7 +136,7 @@ Meteor.methods({
    * @param {Number} discount - Amount of the discount, as a positive number
    * @return {Object} return this.processPayment result
    */
-  "orders/approvePayment": (order, discount) => {
+  "orders/approvePayment": function (order, discount) {
     check(order, Object);
     check(discount, Number);
 
@@ -148,9 +146,9 @@ Meteor.methods({
 
     // Server-side check to make sure discount is not greater than orderTotal.
     const orderTotal = accounting.toFixed(
-      order.billing[0].invoice.subtotal,
-       order.billing[0].invoice.shipping,
-       order.billing[0].invoice.taxes
+      order.billing[0].invoice.subtotal
+      + order.billing[0].invoice.shipping
+      + order.billing[0].invoice.taxes
       , 2);
 
 
@@ -163,9 +161,9 @@ Meteor.methods({
     this.unblock();
 
     const total =
-      order.billing[0].invoice.subtotal +
-       order.billing[0].invoice.shipping +
-       order.billing[0].invoice.taxes +
+      order.billing[0].invoice.subtotal
+      + order.billing[0].invoice.shipping
+      + order.billing[0].invoice.taxes
       - Math.abs(discount);
 
     return Orders.update(order._id, {
@@ -268,6 +266,37 @@ Meteor.methods({
     };
   },
 
+  // mark each item in the order as canceled
+  /**
+   * orders/shipmentCanceled
+   *
+   * @summary trigger shipmentCanceled status and workflow update
+   * @param {Object} order - order object
+   * @param {Object} shipment - shipment object
+   * @return {Object} return results of several operations
+   */
+  "orders/shipmentCanceled": function (order, shipment) {
+    check(order, Object);
+    check(shipment, Object);
+
+    if (!Reaction.hasPermission("orders")) {
+      Logger.error("User does not have 'orders' permissions");
+      throw new Meteor.Error("access-denied", "Access Denied");
+    }
+
+    this.unblock();
+
+    const itemIds = shipment.items.map((item) => {
+      return item._id;
+    });
+
+    const workflowResult = Meteor.call("workflow/pushItemWorkflow", "coreOrderItemWorkflow/canceled", order, itemIds);
+
+    return {
+      workflowResult: workflowResult
+    };
+  },
+
   /**
    * orders/shipmentDelivered
    *
@@ -327,7 +356,6 @@ Meteor.methods({
   "orders/sendNotification": function (order) {
     check(order, Object);
 
-    
     if (!this.userId) {
       Logger.error("orders/sendNotification: Access denied");
       throw new Meteor.Error("access-denied", "Access Denied");
@@ -356,7 +384,7 @@ Meteor.methods({
       for (const orderItem of order.items) {
         // Find an exising item in the combinedItems array
         const foundItem = combinedItems.find((combinedItem) => {
-          // If item variant exists, then we return true
+          // If and item variant exists, then we return true
           if (combinedItem.variants) {
             return combinedItem.variants._id === orderItem.variants._id;
           }
@@ -366,13 +394,13 @@ Meteor.methods({
 
         // Increment the quantity count for the duplicate product variants
         if (foundItem) {
-          foundItem.quantity;
+          foundItem.quantity++;
         } else {
           // Otherwise push the unique item into the combinedItems array
           combinedItems.push(orderItem);
 
           // Placeholder image if there is no product image
-          orderItem.placeholderImage = Meteor.absoluteUrl("resources/placeholder.gif");
+          orderItem.placeholderImage = Meteor.absoluteUrl() + "resources/placeholder.gif";
 
           const variantImage = Media.findOne({
             "metadata.productId": orderItem.productId,
@@ -441,79 +469,78 @@ Meteor.methods({
       // subject: `Order update from ${shop.name}`,
       html: SSR.render(tpl,  dataForOrderEmail)
     });
-    const shoppersPhone = order.billing[0].address.phone;
-    Logger.info("CUSTOMER ORDER DETAILS", order.items);
-    Logger.info("CUSTOMER'S EMAIL", order.email);
-    Logger.info("CUSTOMERS PHONE NUMBER ", shoppersPhone);
 
-    // let vendorPhones = [];
-    const smsContent = {
-      to: shoppersPhone
-    };
-
-    const message = {
-      "new": "Your Order has been successfully received and is been processed. Thanks.",
-      "coreOrderWorkflow/processing": "Your orders is on the way and will soon be delivered",
-      "coreOrderWorkflow/completed": "Your orders has been shipped, thanks.",
-      "coreorderWorkflow/canceled": "Your order was cancelled",
-      "success": "SMS SENT"
-    };
-
-    Logger.info("smsContent for Customer", smsContent);
-    smsContent.message = message[order.workflow.status];
-    // send sms
-    Meteor.call("send/smsAlert", smsContent);
     return true;
   },
-  /**
-   * send/smsAlert
-    *
-    * @summary trigger sms from twilio
-    * @param {Object} smsContent - body of message object
-    * @return {Object} return success or error on completion
-    */
-   "send/smsAlert": function (smsContent) {
-     check(smsContent, Object);
-     const accountSid = "AC83e13d0c8027ead289bebf4b7b31dfe5";
-     const authToken = "137548d3bda44858d7ffe6d1aa53627b";
-     const client = new twilio(accountSid, authToken);
- 
-     const numb = smsContent.to;
-     let validNo;
-     if (numb.substr(0, 2) === "07" || "08") {
-       validNo = numb.replace(numb.substr(0, 1), "234");
-     }
-     Logger.info(validNo);
-     const body =  smsContent.message;
-     client.messages.create({
-       body,
-       to: validNo || smsContent.to,
-       from: "+19096373657"
-     })
-     .then((message) => {
-       Logger.info(message);
-     }).catch((error) => {
-       throw new Meteor.Error("send-smsAlert", error);
-       Logger.info(error);
-     });
-   },
 
-   /**
-    * orders/response/error
-    * Logs message based on the error info received
-    * @param {Object} error - error message
-    * @param {String} success - success message
-    * @return {null} no return value
-    */
-   "orders/response/error": (error, success) => {
-     check(error);
-     check(success, String);
-     if (error) {
-       Logger.warn("ERROR", error);
-     } else {
-       Logger.info(success);
-     }
-   },
+  // send cancelNotification
+  /**
+   * orders/sendCancelNotification
+   *
+   * @summary send order cancelled notification email
+   * @param {Object} order - order object
+   * @return {Boolean} email sent or not
+   */
+  "orders/sendCancelNotification": function (order) {
+    check(order, Object);
+
+    if (!this.userId) {
+      Logger.error("orders/sendNotification: Access denied");
+      throw new Meteor.Error("access-denied", "Access Denied");
+    }
+
+    this.unblock();
+
+    // shop information for the email to be sent to the user
+    const shop = Shops.findOne(order.shopId);
+    const shopContact = shop.addressBook[0];
+
+    // Get shop logo, if available
+    let emailLogo;
+    if (Array.isArray(shop.brandAssets)) {
+      const brandAsset = _.find(shop.brandAssets, (asset) => asset.type === "navbarBrandImage");
+      const mediaId = Media.findOne(brandAsset.mediaId);
+      emailLogo = path.join(Meteor.absoluteUrl(), mediaId.url());
+    } else {
+      emailLogo = Meteor.absoluteUrl() + "resources/email-templates/shop-logo.png";
+    }
+
+    // data to be sent in the cancel order
+    const dataForOrderCancelEmail = {
+      homepage: Meteor.absoluteUrl(),
+      emailLogo: emailLogo,
+      copyrightDate: moment().format("YYYY"),
+      shop: shop,
+      shopContact: shopContact,
+      order: order,
+
+      // TODO: change this to the date the order was canceled
+      cancelDate: moment(order.createdAt).format("MM/DD/YYYY"),
+      orderUrl: getSlug(shop.name) + "/cart/canceled?_id=" + order.cartId
+    };
+
+    // anonymous users without emails.
+    if (!order.email) {
+      const msg = "No order email found. No notification sent.";
+      Logger.warn(msg);
+      throw new Meteor.Error("email-error", msg);
+    }
+
+    // email templates can be customized in Templates collection
+    // loads defaults from /private/email/templates
+    const tpl = `orders/${order.workflow.status}`;
+    SSR.compileTemplate(tpl, Reaction.Email.getTemplate(tpl));
+
+    Reaction.Email.send({
+      to: order.email,
+      from: `${shop.name} <${shop.emails[0].address}>`,
+      subject: "Your order has been canceled",
+      html: SSR.render(tpl,  dataForOrderCancelEmail)
+    });
+
+    return true;
+  },
+
   /**
    * orders/orderCompleted
    *
@@ -521,7 +548,7 @@ Meteor.methods({
    * @param {Object} order - order object
    * @return {Object} return this.orderCompleted result
    */
-  "orders/orderCompleted": (order) => {
+  "orders/orderCompleted": function (order) {
     check(order, Object);
 
     if (!Reaction.hasPermission("orders")) {
@@ -543,7 +570,7 @@ Meteor.methods({
    * @param {String} data - tracking id
    * @return {String} returns order update result
    */
-  "orders/addShipment": (orderId, data) => {
+  "orders/addShipment": function (orderId, data) {
     check(orderId, String);
     check(data, Object);
 
@@ -577,7 +604,7 @@ Meteor.methods({
    * @param {String} tracking - tracking id
    * @return {String} returns order update result
    */
-  "orders/updateShipmentTracking": (order, shipment, tracking) => {
+  "orders/updateShipmentTracking": function (order, shipment, tracking) {
     check(order, Object);
     check(shipment, Object);
     check(tracking, String);
@@ -605,7 +632,7 @@ Meteor.methods({
    * @param {ShipmentItem} item - A ShipmentItem to add to a shipment
    * @return {String} returns order update result
    */
-  "orders/addItemToShipment":  (orderId, shipmentId, item) => {
+  "orders/addItemToShipment": function (orderId, shipmentId, item) {
     check(orderId, String);
     check(shipmentId, String);
     check(item, Object);
@@ -624,7 +651,7 @@ Meteor.methods({
     });
   },
 
-  "orders/updateShipmentItem": (orderId, shipmentId, item) => {
+  "orders/updateShipmentItem": function (orderId, shipmentId, item) {
     check(orderId, String);
     check(shipmentId, Number);
     check(item, Object);
@@ -651,7 +678,7 @@ Meteor.methods({
    * @param {String} shipmentIndex - shipmentIndex
    * @return {String} returns order update result
    */
-  "orders/removeShipment": (orderId, shipmentIndex) => {
+  "orders/removeShipment": function (orderId, shipmentIndex) {
     check(orderId, String);
     check(shipmentIndex, Number);
 
@@ -678,7 +705,7 @@ Meteor.methods({
    * @param {String} email - valid email address
    * @return {String} returns order update result
    */
-  "orders/addOrderEmail": (cartId, email) => {
+  "orders/addOrderEmail": function (cartId, email) {
     check(cartId, String);
     check(email, String);
     /**
@@ -705,7 +732,7 @@ Meteor.methods({
    * @param {String} docType - CFS docType
    * @return {String} returns order update result
    */
-  "orders/updateDocuments": (orderId, docId, docType) => {
+  "orders/updateDocuments": function (orderId, docId, docType) {
     check(orderId, String);
     check(docId, String);
     check(docType, String);
@@ -732,7 +759,7 @@ Meteor.methods({
    * @param {String} value - event value
    * @return {String} returns order update result
    */
-  "orders/updateHistory": (orderId, event, value) => {
+  "orders/updateHistory": function (orderId, event, value) {
     check(orderId, String);
     check(event, String);
     check(value, Match.Optional(String));
@@ -759,7 +786,7 @@ Meteor.methods({
    * @param {String} orderId - add tracking to orderId
    * @return {null} no return value
    */
-  "orders/inventoryAdjust": (orderId) => {
+  "orders/inventoryAdjust": function (orderId) { // important (adjust inventory)
     check(orderId, String);
 
     if (!Reaction.hasPermission("orders")) {
@@ -861,7 +888,7 @@ Meteor.methods({
    * @param {Object} paymentMethod - paymentMethod object
    * @return {null} no return value
    */
-  "orders/refunds/list": (paymentMethod) => {
+  "orders/refunds/list": function (paymentMethod) {
     check(paymentMethod, Object);
 
     if (!Reaction.hasPermission("orders")) {
@@ -894,7 +921,7 @@ Meteor.methods({
    * @param {Number} amount - Amount of the refund, as a positive number
    * @return {null} no return value
    */
-  "orders/refunds/create": (orderId, paymentMethod, amount) => {
+  "orders/refunds/create": function (orderId, paymentMethod, amount) { // Important (refund)
     check(orderId, String);
     check(paymentMethod, Reaction.Schemas.PaymentMethod);
     check(amount, Number);
@@ -923,35 +950,8 @@ Meteor.methods({
         "Attempt to refund transaction failed", result.error);
     }
   },
-  /**
-   * orders/shipmentCanceled
-   *
-   * @summary trigger shipmentCanceled status and workflow update
-   * @param {Object} order - order object
-   * @param {Object} shipment - shipment object
-   * @return {Object} return results of several operations
-   */
-  "orders/shipmentCanceled": function (order, shipment) {
-    check(order, Object);
-    check(shipment, Object);
 
-    if (!Reaction.hasPermission("orders")) {
-      Logger.error("User does not have 'orders' permissions");
-      throw new Meteor.Error("access-denied", "Access Denied");
-    }
-
-    this.unblock();
-
-    const itemIds = shipment.items.map((item) => {
-      return item._id;
-    });
-
-    const workflowResult = Meteor.call("workflow/pushItemWorkflow", "coreOrderItemWorkflow/canceled", order, itemIds);
-
-    return {
-      workflowResult: workflowResult
-    };
-  },
+  // important (added to deal with cancelling orders)
   /**
    * orders/cancelOrder
    *
@@ -983,7 +983,7 @@ Meteor.methods({
           // send an email to the user
           Meteor.call("orders/sendCancelNotification", order, (err) => {
             if (err) {
-              Logger.error(err, "orders/orderCanceled: Failed to send notification");
+              Logger.error(error, "orders/orderCanceled: Failed to send notification");
             }
           });
         }
