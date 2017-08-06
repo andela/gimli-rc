@@ -2,7 +2,7 @@
   {{#if hasPermission 'orders'}}
     <div class="container-fluid-sm">
       {{#each order in orders}}
-        {{> ordersListItem (itemProps order)}}
+         {{> ordersListItem (itemProps order)}}
       {{else}}
 
         <div class="empty-view-message">

@@ -8,6 +8,8 @@ import "./styles/megaMenu.less";
 import "./styles/singleproduct.less";
 import "./components/navbar/navbar.html";
 import "./components/navbar/navbar";
+import "./components/tour.html";
+import "./components/tour";
 import "./components/tagNav/tagNav.html";
 import "./components/tagNav/tagNav";
 import "./templates/layout/header/header.html";

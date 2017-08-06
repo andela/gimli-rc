@@ -149,6 +149,9 @@ Template.coreOrderShippingTracking.helpers({
       label: "Cancel order",
       onClick() {
         Meteor.call("orders/cancelOrder", order._id, function(error, result){
+          Alerts.alert({
+            title: "Order cancelled successfully"
+          });
           if (error) {
             console.log("error", error);
           }
