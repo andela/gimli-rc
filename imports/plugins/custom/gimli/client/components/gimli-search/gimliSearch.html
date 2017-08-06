@@ -1,0 +1,17 @@
+<template name="gimliSearch">
+  <div class="gimliSearch">
+    <div class="input-group">
+      <input id="searchInput" type="text" class="form-control" aria-label="Search for products" placeholder="Search for products">
+      <span class="input-group-addon"><i class="fa fa-search"></i></span>
+    </div>
+    <div class="searchDropdown">
+      <ul>
+      {{#each product in products}}
+        <li>
+          <a href="/reaction-commerce/product/{{product.handle}}">{{product.title}} <span> - in {{product.category}} Category</span></a>
+        </li>
+      {{/each}}
+    </ul>
+    </div>
+  </div>
+</template>

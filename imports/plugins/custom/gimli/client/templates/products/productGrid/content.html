@@ -5,13 +5,17 @@
         <h6>{{title}}</h6>
       </div>
       <div class="product-price">
-        <h6>₦1,000,000 <span>₦1,200,00</span></h6>
+        <h6>₦{{priceFormat price.min}} <span>₦{{priceFormat price.max}}</span></h6>
       </div>
       <div class="product-vendor">
-        <h6>Vendor <span>Cele Mobiles</span></h6>
+        <h6>Vendor <span>{{vendor}}</span></h6>
       </div>
       <div class="product-stock">
-        <h6>IN STOCK: 50</h6>
+        {{#if isSoldOut}}
+          {{> gridNotice}}
+        {{else}}
+          <h6>IN STOCK: 50 </h6>
+        {{/if}}
       </div>
       <!-- <div class="overlay">
         <div class="overlay-title">{{title}}</div>

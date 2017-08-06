@@ -6,5 +6,8 @@ Reaction.registerPackage({
 
   // Name of your theme to uniquely identify it from other themes
   name: "reaction-gimli-theme",
-  autoEnable: true
+  autoEnable: true,
+  layout: [{
+    collection: "Products"
+  }]
 });

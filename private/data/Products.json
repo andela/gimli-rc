@@ -11,6 +11,7 @@
     "rpjCvTBGjhBi2xdro",
     "cseCBSSrJ3t8HQSNP"
   ],
+  "quantity": 30,
   "price.range": "12.99 - 19.99",
   "price.min": 12.99,
   "price.max": 19.99,
@@ -25,13 +26,14 @@
     "key": "Quality",
     "value": "Excellent"
   }],
+  "category": "mobile",
   "pageTitle": "This is a basic product. You can do a lot with it.",
   "type": "simple",
-  "title": "Basic Reaction Product",
+  "title": "Demo product",
   "updatedAt": {
     "$date": "2014-06-01T12:17:13.949-0700"
   },
-  "vendor": "Example Manufacturer"
+  "vendor": "Team Gimli"
 }, {
   "_id": "6qiqPwBkeJdtdQc4G",
   "ancestors": [
@@ -56,7 +58,8 @@
   }],
   "shopId": "J8Bhq3uTtdgwZx3rz",
   "taxable": true,
-  "type": "variant"
+  "type": "variant",
+  "compareAtPrice": 29.99
 }, {
   "_id": "SMr4rhDFnYvFMtDTX",
   "ancestors": [

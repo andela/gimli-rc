@@ -117,9 +117,19 @@ Template.variantForm.helpers({
 Template.variantForm.events({
   "change form :input": function (event, template) {
     const field = $(event.currentTarget).attr("name");
+    const ancestorId = template.data.ancestors[0];
+    const compareAtPrice = $("input[name=compareAtPrice]").val();
+    const price = $("input[name=price]").val();
+    const range = `${price} - ${compareAtPrice}`;
     //
     // this should really move into a method
     //
+    if (field === "price" || field === "compareAtPrice") {
+      Meteor.call("products/updateProductField", ancestorId, "price.min", price);
+      Meteor.call("products/updateProductField", ancestorId, "price.max", compareAtPrice);
+      Meteor.call("products/updateProductField", ancestorId, "price.range", range);
+    }
+
     if (field === "taxable" || field === "inventoryManagement" || field === "inventoryPolicy") {
       const value = $(event.currentTarget).prop("checked");
       if (ReactionProduct.checkChildVariants(template.data._id) > 0) {
