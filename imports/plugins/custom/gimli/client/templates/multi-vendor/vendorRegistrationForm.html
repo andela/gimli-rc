@@ -1,0 +1,51 @@
+<template name="gimliVendorRegistrationForm">
+  <div class="container">
+    <form id="vendor-registration-form">
+      <div class="row">
+        <div class="col-sm-6 col-md-6">
+          <div class="form-group form-group-lg">
+            <label for="firstName">First Name</label>
+            <input type="text" class="form-control" id="firstName">
+          </div>
+          <div class="form-group form-group-lg">
+            <label for="lastName">Last Name</label>
+            <input type="text" class="form-control" id="lastName">
+          </div>
+          <div class="form-group form-group-lg">
+            <label for="phoneNumber">Phone Number</label>
+            <div class="input-group">
+              <div class="input-group-addon">Mobile</div>
+              <input type="tel" class="form-control" id="phoneNumber">
+            </div>
+          </div>
+          
+        </div>
+        <div class="col-sm-6 col-md-6">
+          <div class="form-group form-group-lg">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email">
+          </div>
+          <div class="form-group form-group-lg">
+            <label for="storeName">Preferred Store Name</label>
+            <input type="text" class="form-control" id="storeName">
+          </div>
+          <div class="form-group form-group-lg">
+            <label for="productCategory">Main Product Category</label>
+            <select id="productCategory" class="form-control">
+              <option>Digital Products</option>
+              <option>Electronics</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <label for="address">Address</label>
+          <textarea class="form-control" rows="5" id="address"></textarea>
+        </div>
+         <div id="register-btn">
+          <button type="submit" class="btn btn-primary btn-block">Register</button>
+        </div>
+      </div>
+     
+    </form>
+  </div>
+</template>

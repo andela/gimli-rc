@@ -6,5 +6,12 @@ Reaction.registerPackage({
 
   // Name of your theme to uniquely identify it from other themes
   name: "reaction-gimli-theme",
-  autoEnable: true
+  autoEnable: true,
+  registry: [
+    {
+      route: "/muiti-vendor/registration",
+      name: "multiVendorRegistration",
+      template: "gimliMultiVendor"
+    }
+  ]
 });

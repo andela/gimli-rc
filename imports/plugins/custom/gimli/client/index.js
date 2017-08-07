@@ -6,6 +6,7 @@ import "./styles/bootstrap.less";
 import "./styles/products.less";
 import "./styles/megaMenu.less";
 import "./styles/singleproduct.less";
+import "./styles/vendor.less";
 import "./components/navbar/navbar.html";
 import "./components/navbar/navbar";
 import "./components/tagNav/tagNav.html";
@@ -26,5 +27,8 @@ import "./templates/layout/megaMenu/sideNav.html";
 import "./templates/layout/megaMenu/banner.html";
 import "./templates/layout/megaMenu/specialOffers.html";
 import "./templates/layout/megaMenu/megaMenu";
+import "./templates/multi-vendor/vendorRegistrationForm.html";
+import "./templates/multi-vendor/multiVendor.html";
+
 // import "./templates/productDetailSimple.html";
 // import "./templates/productDetailSimple.js";
