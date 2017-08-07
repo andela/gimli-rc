@@ -1,4 +1,7 @@
 import React, { Component, PropTypes } from "react";
+import { Meteor } from "meteor/meteor";
+import { Reaction } from "/client/api";
+import { Category } from "/lib/collections";
 import {
   Button,
   Currency,
@@ -172,7 +175,13 @@ class ProductDetail extends Component {
   }
 
   render() {
+    Meteor.subscribe("Category");
     const props = this.props;
+    const allCategories = Category.find({}).map((category, index) => (
+      <option value={category.title} key={index}>
+        {category.title}
+      </option>
+    ));
     return (
       <div className="" style={{position: "relative"}}>
         {this.renderToolbar()}
@@ -181,7 +190,8 @@ class ProductDetail extends Component {
           <AlertContainer placement="productManagement" />
           <div className="breadcrumbs">
             <ul>
-              <li><a href="#">Home</a></li>
+              <li><a href="/">Home</a></li>
+              <li><a href={`/catalog/products?q=${props.product.category}`}>{props.product.category}</a></li>
               <li><a href="#">{props.product.title}</a></li>
             </ul>
           </div>
@@ -219,6 +229,25 @@ class ProductDetail extends Component {
                       }}
                     />
                   </div>
+                  {Reaction.hasPermission("createProduct") && (
+                    <div>
+                      <span>Category: </span>
+                      <select
+                        name="categories"
+                        id=""
+                        defaultValue={props.product.category}
+                        onChange={(e) => {
+                          this.props.onProductFieldChange(this.props.product._id, "category", e.target.value);
+                        }}
+                      >
+                        <option
+                          defaultValue=""
+                          disabled
+                        >select a product category</option>
+                        {allCategories}
+                      </select>
+                    </div>
+                  )}
                   <div className="line" />
                   <div className="description">
                     <h2>Description</h2>

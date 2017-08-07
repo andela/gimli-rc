@@ -8,6 +8,7 @@ import { Packages } from "/lib/collections";
 
 Template.coreAdminLayout.onRendered(function () {
   $("body").addClass("admin");
+  Meteor.subscribe("Category");
 });
 
 Template.coreAdminLayout.onDestroyed(() => {
@@ -62,6 +63,16 @@ Template.coreAdminLayout.helpers({
         }
 
         instance.dropInstance.open();
+      }
+    });
+
+    items.push({
+      icon: "tags",
+      tooltip: "Create Category",
+      i18nKeyTooltip: "Create Category",
+      tooltipPosition: "left middle",
+      onClick() {
+        $("#myModal").modal();
       }
     });
 
@@ -141,6 +152,26 @@ Template.coreAdminLayout.helpers({
       return settingsData;
     }
     return reactionApp;
+  }
+});
+
+Template.coreAdminLayout.events({
+  "click #addCategory"(event) {
+    event.preventDefault();
+    const titleCont = $("body #categoryTitle");
+    const title = titleCont.val();
+    if (title !== "") {
+      Meteor.call("category.insert", title, (error, result) => {
+        if (!error) {
+          $("#snackbar").html("Success");
+          $("#snackbar").addClass("show");
+          setTimeout(() => {
+            $("#snackbar").removeClass("show");
+          });
+        }
+      });
+    }
+    titleCont.val("");
   }
 });
 

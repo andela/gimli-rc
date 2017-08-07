@@ -1,10 +1,16 @@
 <template name="banner">
-<div>
-  <ul class="bxslider">
-    <li><img src="/resources/images/slider-image.jpg" /></li>
-    <li><img src="/resources/images/slider-image.jpg" /></li>
-    <li><img src="/resources/images/slider-image.jpg" /></li>
-    <li><img src="/resources/images/slider-image.jpg" /></li>
-  </ul>
+<!-- Swiper -->
+<div class="swiper-container">
+  <div class="swiper-wrapper">
+    <div class="swiper-slide"><img class="img-responsive" src="/resources/images/slider-image.jpg" /></div>
+    <div class="swiper-slide"><img class="img-responsive" src="/resources/images/slider-image.jpg" /></div>
+    <div class="swiper-slide"><img class="img-responsive" src="/resources/images/slider-image.jpg" /></div>
+    <div class="swiper-slide"><img class="img-responsive" src="/resources/images/slider-image.jpg" /></div>
+  </div>
+  <!-- Add Pagination -->
+  <div class="swiper-pagination"></div>
+  <!-- Add Arrows -->
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
 </div>
 </template>

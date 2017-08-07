@@ -1,0 +1,141 @@
+<template name="newProductGrid">
+  <div>
+    <!-- Mobile Template Area  -->
+    <div class="row bg-white mt-10 mb-10">
+      <div class="cont">
+        <div class="">
+          <div class="product-grid">
+            <ul class="product-grid-list list-unstyled" id="product-grid-list">
+              <!-- DealZone display starts here -->
+              <div class="col-12 col-xs-6 col-sm-4 col-md-3 col-lg-2 ps-10">
+                <a href="/catalog/products?q=mobile">
+                  <div class="product-col product-deal border-2">
+                    <div class="header bg-2">
+                      <h5 class="big">MOBILE DEALZONE</h5>
+                    </div>
+                    <div class="content p-10">
+                      <div class="real-image">
+                        <img src="/resources/images/iphone_7a.png" class="responsive-img" alt="iphone">
+                      </div>
+                      <div class="fixed-image bg-trans-2">
+                        <img src="/resources/images/70off.png" class="responsive-img" alt="discount">
+                      </div>
+                      <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                  </div>
+                </a>
+              </div>
+              <!-- DealZone display ends here -->
+              {{#each mobile}}
+                {{> productGridItems}}
+              {{else}}
+                <div class="row vertical-align">
+                  <div class="text-center">
+                    <img src="/resources/images/not_found.png" alt="product not found" />
+                    <h3>
+                      <span data-i18n="app.noProductsFound">No Products Found</span>
+                    </h3>
+                  </div>
+                </div>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Mobile Template Area Ends -->
+
+    <!-- Women's wear Template Area  -->
+    <div class="row bg-white mt-10 mb-10">
+      <div class="cont">
+        <div class="">
+          <div class="product-grid">
+            <ul class="product-grid-list list-unstyled" id="product-grid-list">
+              <!-- DealZone display starts here -->
+              <div class="col-12 col-xs-6 col-sm-4 col-md-3 col-lg-2 ps-10">
+                <a href="/catalog/products?q=womens-fashion">
+                  <div class="product-col product-deal border-2">
+                    <div class="header bg-2">
+                      <h5 class="big">LADIES WEAR</h5>
+                    </div>
+                    <div class="content p-10">
+                      <div class="real-image">
+                        <img src="/resources/images/cloth_3.jpg" class="responsive-img" alt="iphone">
+                      </div>
+                      <div class="fixed-image bg-trans-2">
+                        <img src="/resources/images/70off.png" class="responsive-img" alt="discount">
+                      </div>
+                      <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                  </div>
+                </a>
+              </div>
+              <!-- DealZone display ends here -->
+              {{#each womenFashion}}
+                {{> productGridItems}}
+              {{else}}
+                <div class="row vertical-align">
+                  <div class="text-center">
+                    <img src="/resources/images/not_found.png" alt="product not found" />
+                    <h3>
+                      <span data-i18n="app.noProductsFound">No Products Found</span>
+                    </h3>
+                  </div>
+                </div>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Women's wear Area Ends -->
+
+    <!-- Men's wear Template Area  -->
+    <div class="row bg-white mt-10 mb-10">
+      <div class="cont">
+        <div class="">
+          <div class="product-grid">
+            <ul class="product-grid-list list-unstyled" id="product-grid-list">
+              <!-- DealZone display starts here -->
+              <div class="col-12 col-xs-6 col-sm-4 col-md-3 col-lg-2 ps-10">
+                <a href="/catalog/products?q=mens-fashion">
+                  <div class="product-col product-deal border-2">
+                    <div class="header bg-2">
+                      <h5 class="big">MEN'S WEAR DEALZONE</h5>
+                    </div>
+                    <div class="content p-10">
+                      <div class="real-image">
+                        <img src="/resources/images/jean.jpg" class="responsive-img" alt="iphone">
+                      </div>
+                      <div class="fixed-image bg-trans-2">
+                        <img src="/resources/images/70off.png" class="responsive-img" alt="discount">
+                      </div>
+                      <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                  </div>
+                </a>
+              </div>
+              <!-- DealZone display ends here -->
+              {{#each menFashion}}
+                {{> productGridItems}}
+              {{else}}
+                <div class="row vertical-align">
+                  <div class="text-center">
+                    <img src="/resources/images/not_found.png" alt="product not found" />
+                    <h3>
+                      <span data-i18n="app.noProductsFound">No Products Found</span>
+                    </h3>
+                  </div>
+                </div>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Men's wear Area Ends -->
+  </div>
+</template>
